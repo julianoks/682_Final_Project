@@ -25,11 +25,11 @@ class Classifier_Model(object):
 	def close_session(self):
 		if self.sess != None: self.sess.close()
 
-	def train(self, mnist_dataset, iterations=1000, init_params=None, batch_size=50, print_every=100):
+	def train(self, mnist_dataset, iterations=1000, init_params=None, batch_size=64, print_every=100):
 		X = tf.placeholder(tf.float32, shape=[None, 784])
 		Y = tf.placeholder(tf.float32, shape=[None, 10])
 		loss = self.loss(X, Y)
-		train_step = tf.train.GradientDescentOptimizer(1e-4).minimize(loss)
+		train_step = tf.train.GradientDescentOptimizer(1e-3).minimize(loss)
 		accuracy = self.accuracy(X, Y)
 		# start training
 		self.ensure_session()
