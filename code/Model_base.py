@@ -12,7 +12,7 @@ class Classifier_Model(object):
 		return loss
 
 	def accuracy(self, X, Y):
-		scores = self.forward(X)
+		scores = tf.map_fn(lambda x: self.forward([x])[0], X)
 		correct_prediction = tf.equal(tf.argmax(scores, 1), tf.argmax(Y, 1))
 		accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
 		return accuracy
