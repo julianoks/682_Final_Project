@@ -71,5 +71,5 @@ if __name__ == "__main__":
 	from utils import get_mnist_dataset
 	from MNIST import MNIST_model
 	mnist = get_mnist_dataset()
-	recomb_accuracy(mnist, MNIST_model, random_slope=True, n_iterations=500, n_recombinations=5)
-	recomb_accuracy(mnist, MNIST_model, random_slope=False, n_iterations=500, n_recombinations=5)
+	recomb_accuracy(mnist, MNIST_model, random_slope=True, n_iterations=1000, n_recombinations=5)
+	recomb_accuracy(mnist, MNIST_model, random_slope=False, n_iterations=1000, n_recombinations=5)
