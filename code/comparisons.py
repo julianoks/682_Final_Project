@@ -28,7 +28,7 @@ def serialize_weights(model):
 
 def relative_difference_between_nets(model1, model2):
 	s1, s2 = serialize_weights(model1), serialize_weights(model2)
-	return np.sum(np.abs(((s1+s2)*(s1-s2)) / (s1*s2)))
+	return np.sum(np.abs((s1-s2) / s2))
 
 
 def get_accuracy(model, X, Y):
@@ -58,8 +58,6 @@ def recomb_accuracy(dataset, model_class, n_recombinations=10, n_iterations=1000
 	X, Y = dataset.test.images, dataset.test.labels
 	def recombined_accuracy():
 		child = recombine(model_class, model1, model2)
-		model1.close_session()
-		model2.close_session()
 		return get_accuracy(child, X, Y)
 	accuracies = [recombined_accuracy() for _ in range(n_recombinations)]
 	print("Recombined Accuracies:", accuracies , "Mean:", np.mean(accuracies), "\n\n")
@@ -71,5 +69,5 @@ if __name__ == "__main__":
 	from utils import get_mnist_dataset
 	from MNIST import MNIST_model
 	mnist = get_mnist_dataset()
-	recomb_accuracy(mnist, MNIST_model, random_slope=True, n_iterations=1000, n_recombinations=5)
-	recomb_accuracy(mnist, MNIST_model, random_slope=False, n_iterations=1000, n_recombinations=5)
+	recomb_accuracy(mnist, MNIST_model, random_slope=True, n_iterations=1000, n_recombinations=0)
+	recomb_accuracy(mnist, MNIST_model, random_slope=False, n_iterations=1000, n_recombinations=0)
