@@ -18,7 +18,7 @@ def _slope_const(n_filters, random=False):
 class conv_layer(object):
 	def __init__(self, filter_size=[2,2], input_channels=1, n_filters=32, random_slope=False, dont_relu=False):
 		self.dont_relu = dont_relu
-		self.W = _weight_var([*filter_size, input_channels, n_filters])
+		self.W = _weight_var(filter_size + [input_channels, n_filters])
 		self.b = _bias_var([1,1,1,n_filters])
 		self.slope = _slope_const(n_filters, random=random_slope)
 	def forward(self, x):
