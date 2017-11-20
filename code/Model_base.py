@@ -25,14 +25,17 @@ class Classifier_Model(object):
 	def close_session(self):
 		if self.sess != None: self.sess.close()
 
-	def train(self, mnist_dataset, iterations=1000, batch_size=50, print_every=100):
+	def train(self, mnist_dataset, iterations=1000, init_params=None, batch_size=50, print_every=100):
 		X = tf.placeholder(tf.float32, shape=[None, 784])
 		Y = tf.placeholder(tf.float32, shape=[None, 10])
 		loss = self.loss(X, Y)
-		train_step = tf.train.AdamOptimizer(1e-4).minimize(loss)
+		train_step = tf.train.GradientDescentOptimizer(1e-4).minimize(loss)
 		accuracy = self.accuracy(X, Y)
 		# start training
 		self.ensure_session()
+		if init_params != None:
+			for k in self.layers:
+				self.layers[k].slope = tf.cast(self.sess.run(self.layers[k].slope), dtype=tf.float32)
 		for i in range(iterations):
 			batch = mnist_dataset.train.next_batch(batch_size)
 			if (print_every != False) and (i % print_every == 0):
