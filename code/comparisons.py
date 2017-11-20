@@ -50,7 +50,7 @@ def recombine(model_class, model1, model2):
 	combined_model.set_layers(combined_params)
 	return combined_model
 
-def recomb_accuracy(dataset, model_class, n_recombinations=10, n_iterations=500, random_slope=False, reg_strength=1e-4, printing=True):
+def recomb_accuracy(dataset, model_class, n_recombinations=10, n_iterations=1000, random_slope=False, reg_strength=1e-4, printing=True):
 	if printing: print("Using random slope?", random_slope)
 	model1, model2 = train_pair(dataset, model_class, n_iterations=n_iterations, random_slope=random_slope, reg_strength=reg_strength, printing=printing)
 	print("relative_difference_between_nets:", relative_difference_between_nets(model1, model2))
@@ -58,6 +58,8 @@ def recomb_accuracy(dataset, model_class, n_recombinations=10, n_iterations=500,
 	X, Y = dataset.test.images, dataset.test.labels
 	def recombined_accuracy():
 		child = recombine(model_class, model1, model2)
+		model1.close_session()
+		model2.close_session()
 		return get_accuracy(child, X, Y)
 	accuracies = [recombined_accuracy() for _ in range(n_recombinations)]
 	print("Recombined Accuracies:", accuracies , "Mean:", np.mean(accuracies), "\n\n")
