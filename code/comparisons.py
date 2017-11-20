@@ -26,9 +26,9 @@ def serialize_weights(model):
 			serial.append(params[i][j].ravel())
 	return np.hstack(serial)
 
-def relative_difference_between_nets(model1, model2):
+def distance_between_nets(model1, model2):
 	s1, s2 = serialize_weights(model1), serialize_weights(model2)
-	return np.sum(np.abs((s1-s2) / s2))
+	return np.linalg.norm(s1-s2)
 
 
 def get_accuracy(model, X, Y):
@@ -53,13 +53,15 @@ def recombine(model_class, model1, model2):
 def recomb_accuracy(dataset, model_class, n_recombinations=10, n_iterations=1000, random_slope=False, reg_strength=1e-4, printing=True):
 	if printing: print("Using random slope?", random_slope)
 	model1, model2 = train_pair(dataset, model_class, n_iterations=n_iterations, random_slope=random_slope, reg_strength=reg_strength, printing=printing)
-	print("relative_difference_between_nets:", relative_difference_between_nets(model1, model2))
+	print("distance_between_nets:", distance_between_nets(model1, model2))
 	child = recombine(model_class, model1, model2)
 	X, Y = dataset.test.images, dataset.test.labels
 	def recombined_accuracy():
 		child = recombine(model_class, model1, model2)
 		return get_accuracy(child, X, Y)
 	accuracies = [recombined_accuracy() for _ in range(n_recombinations)]
+	model1.close_session()
+	model2.close_session()
 	print("Recombined Accuracies:", accuracies , "Mean:", np.mean(accuracies), "\n\n")
 	return np.mean(accuracies), accuracies
 
