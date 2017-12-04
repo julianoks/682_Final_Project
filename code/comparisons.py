@@ -17,6 +17,23 @@ def train_pair(dataset, model_class, n_iterations=1000, random_slope=False, reg_
 	return model1, model2
 
 
+def train_pair_on_schedule(dataset, model_class, n_iterations=1000, random_slope=False, reg_strength=1e-4, printing=True, update_percent=0.1):
+	dummy = model_class(random_slope=random_slope)
+	dummy.ensure_session()
+	init_params = dummy.get_layers()
+	dummy.close_session()
+	del dummy
+
+	random_seed = int(1e8*np.random.random())
+
+	if printing: print("Training model 1...")
+	model1 = model_class(random_slope=random_slope)
+	model1.train_sheduled_sparse(dataset, iterations=n_iterations, init_params=init_params, random_seed=random_seed, update_percent=update_percent)
+	if printing: print("Training model 2...")
+	model2 = model_class(random_slope=random_slope)
+	model2.train_sheduled_sparse(dataset, iterations=n_iterations, init_params=init_params, random_seed=random_seed, update_percent=update_percent)
+	return model1, model2
+
 
 def serialize_weights(model):
 	params = model.get_layers()
@@ -50,9 +67,12 @@ def recombine(model_class, model1, model2):
 	combined_model.set_layers(combined_params)
 	return combined_model
 
-def recomb_accuracy(dataset, model_class, n_recombinations=10, n_iterations=1000, random_slope=False, reg_strength=1e-4, printing=True):
+def recomb_accuracy(dataset, model_class, sparse_training=False, update_percent=0.1, n_recombinations=10, n_iterations=1000, random_slope=False, reg_strength=1e-4, printing=True):
 	if printing: print("Using random slope?", random_slope)
-	model1, model2 = train_pair(dataset, model_class, n_iterations=n_iterations, random_slope=random_slope, reg_strength=reg_strength, printing=printing)
+	if sparse_training:
+		model1, model2 = train_pair_on_schedule(dataset, model_class, n_iterations=n_iterations, random_slope=random_slope, reg_strength=reg_strength, printing=printing)
+	else:
+		model1, model2 = train_pair(dataset, model_class, n_iterations=n_iterations, random_slope=random_slope, reg_strength=reg_strength, printing=printing)
 	print("distance_between_nets:", distance_between_nets(model1, model2))
 	child = recombine(model_class, model1, model2)
 	X, Y = dataset.test.images, dataset.test.labels
@@ -71,5 +91,7 @@ if __name__ == "__main__":
 	from utils import get_mnist_dataset
 	from MNIST import MNIST_model
 	mnist = get_mnist_dataset()
-	recomb_accuracy(mnist, MNIST_model, random_slope=True, n_iterations=1000, n_recombinations=0)
-	recomb_accuracy(mnist, MNIST_model, random_slope=False, n_iterations=1000, n_recombinations=0)
+	recomb_accuracy(mnist, MNIST_model, sparse_training=True, n_iterations=50000, n_recombinations=0)
+	recomb_accuracy(mnist, MNIST_model, sparse_training=False, n_iterations=1000, n_recombinations=0)
+	#recomb_accuracy(mnist, MNIST_model, random_slope=True, n_iterations=1000, n_recombinations=0)
+	#recomb_accuracy(mnist, MNIST_model, random_slope=False, n_iterations=1000, n_recombinations=0)

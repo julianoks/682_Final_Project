@@ -1,4 +1,5 @@
 import tensorflow as tf
+from numpy.random import RandomState
 
 class Classifier_Model(object):
 	def loss(self, X, Y):
@@ -25,11 +26,11 @@ class Classifier_Model(object):
 	def close_session(self):
 		if self.sess != None: self.sess.close()
 
-	def train(self, mnist_dataset, iterations=1000, init_params=None, batch_size=64, print_every=100):
+	def train(self, mnist_dataset, iterations=1000, init_params=None, batch_size=64, print_every=100, learning_rate=1e-3):
 		X = tf.placeholder(tf.float32, shape=[None, 784])
 		Y = tf.placeholder(tf.float32, shape=[None, 10])
 		loss = self.loss(X, Y)
-		train_step = tf.train.GradientDescentOptimizer(1e-3).minimize(loss)
+		train_step = tf.train.GradientDescentOptimizer(learning_rate).minimize(loss)
 		accuracy = self.accuracy(X, Y)
 		# start training
 		self.ensure_session()
@@ -42,6 +43,35 @@ class Classifier_Model(object):
 				train_accuracy = self.sess.run(accuracy, feed_dict={X: batch[0], Y: batch[1]})
 				print('step %d, training accuracy %g' % (i, train_accuracy))
 			train_step.run(feed_dict={X: batch[0], Y: batch[1]}, session=self.sess)
+		print('test accuracy %g' % self.sess.run(accuracy, feed_dict= \
+			{X: mnist_dataset.test.images, Y: mnist_dataset.test.labels}))
+
+	def train_sheduled_sparse(self, mnist_dataset, iterations=1000, init_params=None, batch_size=64, print_every=100, learning_rate=1e-3, random_seed=123456789, update_percent=0.1):
+		X = tf.placeholder(tf.float32, shape=[None, 784])
+		Y = tf.placeholder(tf.float32, shape=[None, 10])
+		loss = self.loss(X, Y)
+		accuracy = self.accuracy(X, Y)
+		variable_objects = [v for v in tf.trainable_variables()]
+		gradient_objects = [tf.gradients(loss, [v])[0] for v in variable_objects]
+		zipped = list(zip(variable_objects, gradient_objects))
+		zipped = list(filter(lambda x:x[1]!=None, zipped))
+		# start training
+		self.ensure_session()
+		if init_params != None:
+			for k in self.layers:
+				self.layers[k].slope = tf.cast(self.sess.run(self.layers[k].slope), dtype=tf.float32)
+		rand_state = RandomState(random_seed)
+		for i in range(iterations):
+			batch = mnist_dataset.train.next_batch(batch_size)
+			if (print_every != False) and (i % print_every == 0):
+				train_accuracy = self.sess.run(accuracy, feed_dict={X: batch[0], Y: batch[1]})
+				print('step %d, training accuracy %g' % (i, train_accuracy))
+			var, grad = zipped[int(rand_state.rand() * len(zipped))]
+			var_mask = tf.cast(rand_state.rand(*var.shape)<update_percent, var.dtype)
+			var_grad = self.sess.run(grad, feed_dict={X: batch[0], Y: batch[1]})
+			new_val = var - (learning_rate * var_mask * var_grad)
+			assn_preval = tf.assign(var, new_val)
+			self.sess.run(assn_preval)
 		print('test accuracy %g' % self.sess.run(accuracy, feed_dict= \
 			{X: mnist_dataset.test.images, Y: mnist_dataset.test.labels}))
 
