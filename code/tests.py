@@ -2,6 +2,8 @@ import tensorflow as tf
 import numpy as np
 from MNIST import *
 from homomorphisms import *
+from comparisons import *
+from utils import *
 
 def relative_error(actual, measured):
 	return np.mean(np.abs((actual-measured)/actual))
@@ -21,6 +23,21 @@ def get_random_model():
 	random_params = _randomize_parameters(model.get_layers())
 	model.set_layers(random_params)
 	return model
+
+def test_slope_init():
+	mnist = get_mnist_dataset()
+	a,b = train_pair(mnist, MNIST_model, n_iterations=0, random_slope=True, reg_strength=1e-4, printing=False)
+	a,b = [model.get_layers() for model in [a,b]]
+	a,b = [[model[x]['slope'] for x in model] for model in [a,b]]
+	diffs = np.array([relative_error(*slopes) for slopes in zip(a,b)])
+	#print("Difference in slopes:", diffs)
+	if np.all(diffs < 1e-6):
+		print("Passed init slope")
+		return True
+	else:
+		print("Failed init slope")
+		return False
+
 
 def test_numpy_get_set():
 	model = get_random_model()
@@ -76,6 +93,7 @@ def test_neuron_permutation():
 		return False
 
 def run_all_tests():
+	test_slope_init()
 	test_numpy_get_set()
 	test_random_to_identity_relu()
 	test_neuron_permutation()

@@ -8,12 +8,14 @@ def train_pair(dataset, model_class, n_iterations=1000, random_slope=False, reg_
 	dummy.close_session()
 	del dummy
 
+	if printing: print_every = 1000
+	else: print_every = False
 	if printing: print("Training model 1...")
 	model1 = model_class(random_slope=random_slope)
-	model1.train(dataset, iterations=n_iterations, init_params=init_params)
+	model1.train(dataset, iterations=n_iterations, init_params=init_params, print_every=print_every)
 	if printing: print("Training model 2...")
 	model2 = model_class(random_slope=random_slope)
-	model2.train(dataset, iterations=n_iterations, init_params=init_params)
+	model2.train(dataset, iterations=n_iterations, init_params=init_params, print_every=print_every)
 	return model1, model2
 
 
@@ -21,7 +23,7 @@ def train_pair_on_schedule(dataset, model_class, n_iterations=1000, random_slope
 	dummy = model_class(random_slope=random_slope)
 	dummy.ensure_session()
 	init_params = dummy.get_layers()
-	dummy.close_session()
+	dumtmy.close_session()
 	del dummy
 
 	random_seed = int(1e8*np.random.random())

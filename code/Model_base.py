@@ -27,6 +27,7 @@ class Classifier_Model(object):
 		if self.sess != None: self.sess.close()
 
 	def train(self, mnist_dataset, iterations=1000, init_params=None, batch_size=64, print_every=100, learning_rate=1e-3):
+		''' init_params can be None, or hold the values for the inititial params, but only uses them them to initialize the slopes '''
 		X = tf.placeholder(tf.float32, shape=[None, 784])
 		Y = tf.placeholder(tf.float32, shape=[None, 10])
 		loss = self.loss(X, Y)
@@ -36,17 +37,19 @@ class Classifier_Model(object):
 		self.ensure_session()
 		if init_params != None:
 			for k in self.layers:
-				self.layers[k].slope = tf.cast(self.sess.run(self.layers[k].slope), dtype=tf.float32)
+				self.layers[k].slope = tf.cast(init_params[k]['slope'], dtype=tf.float32)
 		for i in range(iterations):
 			batch = mnist_dataset.train.next_batch(batch_size)
 			if (print_every != False) and (i % print_every == 0):
 				train_accuracy = self.sess.run(accuracy, feed_dict={X: batch[0], Y: batch[1]})
 				print('step %d, training accuracy %g' % (i, train_accuracy))
 			train_step.run(feed_dict={X: batch[0], Y: batch[1]}, session=self.sess)
-		print('test accuracy %g' % self.sess.run(accuracy, feed_dict= \
-			{X: mnist_dataset.test.images, Y: mnist_dataset.test.labels}))
+		if print_every != False:
+			print('test accuracy %g' % self.sess.run(accuracy, feed_dict= \
+				{X: mnist_dataset.test.images, Y: mnist_dataset.test.labels}))
 
 	def train_sheduled_sparse(self, mnist_dataset, iterations=1000, init_params=None, batch_size=64, print_every=100, learning_rate=1e-3, random_seed=123456789, update_percent=0.1):
+		''' init_params can be None, or hold the values for the inititial params, but only uses them them to initialize the slopes '''
 		X = tf.placeholder(tf.float32, shape=[None, 784])
 		Y = tf.placeholder(tf.float32, shape=[None, 10])
 		loss = self.loss(X, Y)
@@ -59,7 +62,7 @@ class Classifier_Model(object):
 		self.ensure_session()
 		if init_params != None:
 			for k in self.layers:
-				self.layers[k].slope = tf.cast(self.sess.run(self.layers[k].slope), dtype=tf.float32)
+				self.layers[k].slope = tf.cast(init_params[k]['slope'], dtype=tf.float32)
 		rand_state = RandomState(random_seed)
 		for i in range(iterations):
 			batch = mnist_dataset.train.next_batch(batch_size)
