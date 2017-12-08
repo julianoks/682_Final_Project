@@ -23,7 +23,7 @@ def train_pair_on_schedule(dataset, model_class, n_iterations=1000, random_slope
 	dummy = model_class(random_slope=random_slope)
 	dummy.ensure_session()
 	init_params = dummy.get_layers()
-	dumtmy.close_session()
+	dummy.close_session()
 	del dummy
 
 	random_seed = int(1e8*np.random.random())
