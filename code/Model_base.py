@@ -38,15 +38,20 @@ class Classifier_Model(object):
 		if init_params != None:
 			for k in self.layers:
 				self.layers[k].slope = tf.cast(init_params[k]['slope'], dtype=tf.float32)
+		history = []
 		for i in range(iterations):
 			batch = mnist_dataset.train.next_batch(batch_size)
 			if (print_every != False) and (i % print_every == 0):
 				train_accuracy = self.sess.run(accuracy, feed_dict={X: batch[0], Y: batch[1]})
 				print('step %d, training accuracy %g' % (i, train_accuracy))
+				history.append(train_accuracy)
 			train_step.run(feed_dict={X: batch[0], Y: batch[1]}, session=self.sess)
 		if print_every != False:
 			print('test accuracy %g' % self.sess.run(accuracy, feed_dict= \
 				{X: mnist_dataset.test.images, Y: mnist_dataset.test.labels}))
+			print history
+		return history
+
 
 	def train_sheduled_sparse(self, mnist_dataset, iterations=1000, init_params=None, batch_size=64, print_every=100, learning_rate=1e-3, random_seed=123456789, update_percent=0.1):
 		''' init_params can be None, or hold the values for the inititial params, but only uses them them to initialize the slopes '''
@@ -64,19 +69,25 @@ class Classifier_Model(object):
 			for k in self.layers:
 				self.layers[k].slope = tf.cast(init_params[k]['slope'], dtype=tf.float32)
 		rand_state = RandomState(random_seed)
+		history = []
 		for i in range(iterations):
 			batch = mnist_dataset.train.next_batch(batch_size)
-			if (print_every != False) and (i % print_every == 0):
-				train_accuracy = self.sess.run(accuracy, feed_dict={X: batch[0], Y: batch[1]})
-				print('step %d, training accuracy %g' % (i, train_accuracy))
 			var, grad = zipped[int(rand_state.rand() * len(zipped))]
-			var_mask = tf.cast(rand_state.rand(*var.shape)<update_percent, var.dtype)
-			var_grad = self.sess.run(grad, feed_dict={X: batch[0], Y: batch[1]})
+			#var_mask = tf.cast(rand_state.rand(*var.shape)<update_percent, var.dtype)
+			var_mask = tf.zeros(shape=var.shape)
+			for _ in range(3): var_mask[:,:,:,int(rand_state.rand()*var.shape[-1])]
+			var_grad, batch_accuracy = self.sess.run([grad, accuracy], feed_dict={X: batch[0], Y: batch[1]})
+			history.append(batch_accuracy)
+			if (print_every != False) and (i % print_every == 0):
+				print('step %d, batch accuracy %g' % (i, batch_accuracy))
 			new_val = var - (learning_rate * var_mask * var_grad)
 			assn_preval = tf.assign(var, new_val)
 			self.sess.run(assn_preval)
-		print('test accuracy %g' % self.sess.run(accuracy, feed_dict= \
-			{X: mnist_dataset.test.images, Y: mnist_dataset.test.labels}))
+		if (print_every != False):
+			print('test accuracy %g' % self.sess.run(accuracy, feed_dict= \
+				{X: mnist_dataset.test.images, Y: mnist_dataset.test.labels}))
+			print(history)
+		return history
 
 	def get_layers(self):
 		numpys = {}
