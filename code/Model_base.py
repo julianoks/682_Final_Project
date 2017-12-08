@@ -74,7 +74,7 @@ class Classifier_Model(object):
 			batch = mnist_dataset.train.next_batch(batch_size)
 			var, grad = zipped[int(rand_state.rand() * len(zipped))]
 			#var_mask = tf.cast(rand_state.rand(*var.shape)<update_percent, var.dtype)
-			var_mask = tf.zeros(shape=var.shape)
+			var_mask = tf.Variable(tf.zeros(shape=var.shape))
 			for _ in range(3): var_mask[:,:,:,int(rand_state.rand()*int(var.shape[-1]))] = 1
 			var_grad, batch_accuracy = self.sess.run([grad, accuracy], feed_dict={X: batch[0], Y: batch[1]})
 			history.append(batch_accuracy)
