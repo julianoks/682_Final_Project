@@ -78,9 +78,10 @@ class Classifier_Model(object):
 			#var_mask = np.zeros(shape=var.shape)
 			#for _ in range(3): var_mask[:,:,:,int(rand_state.rand()*int(var.shape[-1]))] = 1
 			#var_mask = tf.cast(var_mask, var.dtype)
-			var_grad, batch_accuracy = self.sess.run([grad, accuracy], feed_dict={X: batch[0], Y: batch[1]})
-			history.append(batch_accuracy)
+			var_grad = self.sess.run(grad, feed_dict={X: batch[0], Y: batch[1]})
 			if (print_every != False) and (i % print_every == 0):
+				batch_accuracy = self.sess.run(accuracy, feed_dict={X: batch[0], Y: batch[1]})
+				history.append(batch_accuracy)
 				print('step %d, batch accuracy %g' % (i, batch_accuracy))
 			new_val = var - (learning_rate * var_mask * var_grad)
 			assn_preval = tf.assign(var, new_val)
