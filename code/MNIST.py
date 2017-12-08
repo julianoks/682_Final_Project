@@ -4,6 +4,7 @@ from Model_base import Classifier_Model
 
 class MNIST_model(Classifier_Model):
 	def __init__(self, random_slope=False, reg_strength=1e-4):
+		filter_sizes = [4,8,16] #[32, 32, 64]
 		self.sess = None
 		self.input_shape = [784]
 		self.random_slope = random_slope
@@ -12,12 +13,12 @@ class MNIST_model(Classifier_Model):
 		# input (?, 784)
 		# reshape (?, 28, 28, 1)
 		# layer 1 (?, 28, 28, 32)
-		self.layers[1] = conv_layer(filter_size=[5,5], input_channels=1, n_filters=32, random_slope=random_slope)
+		self.layers[1] = conv_layer(filter_size=[5,5], input_channels=1, n_filters=filter_sizes[0], random_slope=random_slope)
 		# layer 2 (?, 28, 28, 32)
-		self.layers[2] = conv_layer(filter_size=[2,2], input_channels=32, n_filters=32, random_slope=random_slope)
+		self.layers[2] = conv_layer(filter_size=[2,2], input_channels=32, n_filters=filter_sizes[1], random_slope=random_slope)
 		# max pool (?, 14, 14, 32)
 		# layer 3 (?, 14, 14, 64)
-		self.layers[3] = conv_layer(filter_size=[2,2], input_channels=32, n_filters=64, random_slope=random_slope)
+		self.layers[3] = conv_layer(filter_size=[2,2], input_channels=32, n_filters=filter_sizes[2], random_slope=random_slope)
 		# max pool (?, 7, 7, 64)
 		# layer 4 (?, 1, 1, 1024)
 		self.layers[4] = conv_layer(filter_size=[7,7], input_channels=64, n_filters=1024, random_slope=random_slope)
