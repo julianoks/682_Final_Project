@@ -19,7 +19,7 @@ def train_pair(dataset, model_class, n_iterations=1000, random_slope=False, reg_
 	return model1, model2
 
 
-def train_pair_on_schedule(dataset, model_class, n_iterations=1000, random_slope=False, reg_strength=1e-4, printing=True, update_percent=0.3):
+def train_pair_on_schedule(dataset, model_class, n_iterations=1000, random_slope=False, reg_strength=1e-4, printing=True, update_percent=0.3, learning_rate=5e-3):
 	dummy = model_class(random_slope=random_slope)
 	dummy.ensure_session()
 	init_params = dummy.get_layers()
@@ -30,10 +30,10 @@ def train_pair_on_schedule(dataset, model_class, n_iterations=1000, random_slope
 
 	if printing: print("Training model 1...")
 	model1 = model_class(random_slope=random_slope)
-	model1.train_sheduled_sparse(dataset, iterations=n_iterations, init_params=init_params, random_seed=random_seed, update_percent=update_percent)
+	model1.train_sheduled_sparse(dataset, iterations=n_iterations, init_params=init_params, random_seed=random_seed, update_percent=update_percent, learning_rate=learning_rate)
 	if printing: print("Training model 2...")
 	model2 = model_class(random_slope=random_slope)
-	model2.train_sheduled_sparse(dataset, iterations=n_iterations, init_params=init_params, random_seed=random_seed, update_percent=update_percent)
+	model2.train_sheduled_sparse(dataset, iterations=n_iterations, init_params=init_params, random_seed=random_seed, update_percent=update_percent, learning_rate=learning_rate)
 	return model1, model2
 
 
