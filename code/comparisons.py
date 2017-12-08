@@ -8,7 +8,7 @@ def train_pair(dataset, model_class, n_iterations=1000, random_slope=False, reg_
 	dummy.close_session()
 	del dummy
 
-	if printing: print_every = 1000
+	if printing: print_every = 50
 	else: print_every = False
 	if printing: print("Training model 1...")
 	model1 = model_class(random_slope=random_slope)
