@@ -19,7 +19,7 @@ def train_pair(dataset, model_class, n_iterations=1000, random_slope=False, reg_
 	return model1, model2
 
 
-def train_pair_on_schedule(dataset, model_class, n_iterations=1000, random_slope=False, reg_strength=1e-4, printing=True, update_percent=0.1):
+def train_pair_on_schedule(dataset, model_class, n_iterations=1000, random_slope=False, reg_strength=1e-4, printing=True, update_percent=0.3):
 	dummy = model_class(random_slope=random_slope)
 	dummy.ensure_session()
 	init_params = dummy.get_layers()
@@ -93,7 +93,7 @@ if __name__ == "__main__":
 	from utils import get_mnist_dataset
 	from MNIST import MNIST_model
 	mnist = get_mnist_dataset()
-	recomb_accuracy(mnist, MNIST_model, sparse_training=True, n_iterations=50000, n_recombinations=0)
+	recomb_accuracy(mnist, MNIST_model, sparse_training=True, n_iterations=25000, n_recombinations=0)
 	recomb_accuracy(mnist, MNIST_model, sparse_training=False, n_iterations=1000, n_recombinations=0)
 	#recomb_accuracy(mnist, MNIST_model, random_slope=True, n_iterations=1000, n_recombinations=0)
 	#recomb_accuracy(mnist, MNIST_model, random_slope=False, n_iterations=1000, n_recombinations=0)
