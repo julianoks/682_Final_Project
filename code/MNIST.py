@@ -22,9 +22,9 @@ class MNIST_model(Classifier_Model):
 		self.layers[3] = conv_layer(filter_size=[2,2], input_channels=channel_sizes[1], n_filters=channel_sizes[2], random_slope=random_slope)
 		# max pool (?, 7, 7, 64)
 		# layer 4 (?, 1, 1, 1024)
-		self.layers[4] = conv_layer(filter_size=[7,7], input_channels=channel_sizes[2], n_filters=channel_sizes[3], random_slope=random_slope)
+		self.layers[4] = conv_layer(filter_size=[1,1], input_channels=channel_sizes[2], n_filters=channel_sizes[3], random_slope=random_slope)
 		# layer 5, w/o ReLu (?, 1, 1, 10)
-		self.layers[5] = conv_layer(filter_size=[1,1], input_channels=channel_sizes[3], n_filters=10, random_slope=random_slope, dont_relu=True)
+		self.layers[5] = conv_layer(filter_size=[7,7], input_channels=channel_sizes[3], n_filters=10, random_slope=random_slope, dont_relu=True)
 		# reshape (?, 10)
 
 	def forward(self, X):
