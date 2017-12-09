@@ -1,7 +1,7 @@
 import tensorflow as tf
 import numpy as np
 
-def train_pair(dataset, model_class, n_iterations=1000, random_slope=False, reg_strength=1e-4, printing=True):
+def train_pair(dataset, model_class, n_iterations=1000, random_slope=False, reg_strength=1e-4, printing=True, learning_rate=0.001):
 	dummy = model_class(random_slope=random_slope)
 	dummy.ensure_session()
 	init_params = dummy.get_layers()
@@ -12,10 +12,10 @@ def train_pair(dataset, model_class, n_iterations=1000, random_slope=False, reg_
 	else: print_every = False
 	if printing: print("Training model 1...")
 	model1 = model_class(random_slope=random_slope)
-	model1.train(dataset, iterations=n_iterations, init_params=init_params, print_every=print_every)
+	model1.train(dataset, iterations=n_iterations, init_params=init_params, print_every=print_every, learning_rate=learning_rate)
 	if printing: print("Training model 2...")
 	model2 = model_class(random_slope=random_slope)
-	model2.train(dataset, iterations=n_iterations, init_params=init_params, print_every=print_every)
+	model2.train(dataset, iterations=n_iterations, init_params=init_params, print_every=print_every, learning_rate=learning_rate)
 	return model1, model2
 
 
@@ -69,12 +69,12 @@ def recombine(model_class, model1, model2):
 	combined_model.set_layers(combined_params)
 	return combined_model
 
-def recomb_accuracy(dataset, model_class, sparse_training=False, update_percent=0.1, n_recombinations=10, n_iterations=1000, random_slope=False, reg_strength=1e-4, printing=True):
+def recomb_accuracy(dataset, model_class, sparse_training=False, update_percent=0.1, n_recombinations=10, n_iterations=1000, random_slope=False, reg_strength=1e-4, learning_rate=0.1, printing=True):
 	if printing: print("Using random slope?", random_slope)
 	if sparse_training:
-		model1, model2 = train_pair_on_schedule(dataset, model_class, n_iterations=n_iterations, random_slope=random_slope, reg_strength=reg_strength, printing=printing)
+		model1, model2 = train_pair_on_schedule(dataset, model_class, n_iterations=n_iterations, update_percent=update_percent, random_slope=random_slope, reg_strength=reg_strength, printing=printing, learning_rate=learning_rate)
 	else:
-		model1, model2 = train_pair(dataset, model_class, n_iterations=n_iterations, random_slope=random_slope, reg_strength=reg_strength, printing=printing)
+		model1, model2 = train_pair(dataset, model_class, n_iterations=n_iterations, random_slope=random_slope, reg_strength=reg_strength, printing=printing, learning_rate=learning_rate)
 	print("distance_between_nets:", distance_between_nets(model1, model2))
 	child = recombine(model_class, model1, model2)
 	X, Y = dataset.test.images, dataset.test.labels
@@ -93,7 +93,5 @@ if __name__ == "__main__":
 	from utils import get_mnist_dataset
 	from MNIST import MNIST_model
 	mnist = get_mnist_dataset()
-	recomb_accuracy(mnist, MNIST_model, sparse_training=True, n_iterations=25000, n_recombinations=0)
-	recomb_accuracy(mnist, MNIST_model, sparse_training=False, n_iterations=1000, n_recombinations=0)
-	#recomb_accuracy(mnist, MNIST_model, random_slope=True, n_iterations=1000, n_recombinations=0)
-	#recomb_accuracy(mnist, MNIST_model, random_slope=False, n_iterations=1000, n_recombinations=0)
+	hyperparams = json.load(open('hyperparameters.py'))
+	recomb_accuracy(mnist, MNIST_model, learning_rate=hyperparams['learning_rate'], sparse_training=hyperparams['sparse_update'], update_percent=hyperparams['update_percent'], random_slope=hyperparams['random_slope'], n_iterations=hyperparams['n_iterations'], n_recombinations=hyperparams['n_recombinations'])
