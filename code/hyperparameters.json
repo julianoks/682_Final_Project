@@ -1,7 +1,8 @@
 {"learning_rate":0.01,
 "n_iterations": 15000,
 "random_slope":false,
-"sparse_update":false,
+"sparse_update":true,
 "update_percent": 0.1,
 "channels":[8,8,32,256],
-"n_recombinations": 11}
+"n_recombinations": 10,
+"print_every": 25}
