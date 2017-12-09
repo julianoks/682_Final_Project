@@ -60,10 +60,6 @@ class Classifier_Model(object):
 		Y = tf.placeholder(tf.float32, shape=[None, 10])
 		loss = self.loss(X, Y)
 		accuracy = self.accuracy(X, Y)
-		variable_objects = [v for v in tf.trainable_variables()]
-		gradient_objects = [tf.gradients(loss, [v])[0] for v in variable_objects]
-		zipped = list(zip(variable_objects, gradient_objects))
-		zipped = list(filter(lambda x:x[1]!=None, zipped))
 		# start training
 		self.ensure_session()
 		if init_params != None:
@@ -73,19 +69,19 @@ class Classifier_Model(object):
 		history = []
 		for i in range(iterations):
 			batch = mnist_dataset.train.next_batch(batch_size)
-			var, grad = zipped[int(rand_state.rand() * len(zipped))]
-			var_mask = tf.cast(rand_state.rand(*var.shape)<update_percent, var.dtype)
-			#var_mask = np.zeros(shape=var.shape)
-			#for _ in range(3): var_mask[:,:,:,int(rand_state.rand()*int(var.shape[-1]))] = 1
-			#var_mask = tf.cast(var_mask, var.dtype)
-			var_grad = self.sess.run(grad, feed_dict={X: batch[0], Y: batch[1]})
+			layer = self.layers[[int(rand_state.rand() * len(self.layers.keys()))]]
+			inds = np.arange(layer.b.shape[-1])
+			inds = rand_state.choice(inds, int(np.ceil(update_percent*len(inds))), replace=False)
+			grad = tf.gradients(loss, [layer.W, layer.b])
+			wg,bg = self.sess.run(grad, feed_dict={X: batch[0], Y: batch[1]})
+			assns = []
+			assns.append(tf.assign(layer.W, layer.W - (learning_rate * wg)))
+			assns.append(tf.assign(layer.b, layer.b - (learning_rate * bg)))
+			self.sess.run(assns)
 			if (print_every != False) and (i % print_every == 0):
 				batch_accuracy = self.sess.run(accuracy, feed_dict={X: batch[0], Y: batch[1]})
 				history.append(batch_accuracy)
 				print('step %d, batch accuracy %g' % (i, batch_accuracy))
-			new_val = var - (learning_rate * var_mask * var_grad)
-			assn_preval = tf.assign(var, new_val)
-			self.sess.run(assn_preval)
 		if (print_every != False):
 			print('test accuracy %g' % self.sess.run(accuracy, feed_dict= \
 				{X: mnist_dataset.test.images, Y: mnist_dataset.test.labels}))

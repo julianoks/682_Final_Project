@@ -2,8 +2,8 @@
 "n_iterations": 2000,
 "random_slope":false,
 "slope_stddev": 0.1,
-"sparse_update":false,
-"update_percent": 1,
+"sparse_update":true,
+"update_percent": 0.2,
 "channels":[16,16,32,256],
 "n_recombinations": 10,
 "print_every": 25}
