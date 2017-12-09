@@ -94,5 +94,5 @@ if __name__ == "__main__":
 	from utils import get_mnist_dataset
 	from MNIST import MNIST_model
 	mnist = get_mnist_dataset()
-	hyperparams = json.load(open('hyperparameters.py'))
+	hyperparams = json.load(open('hyperparameters.json'))
 	recomb_accuracy(mnist, MNIST_model, learning_rate=hyperparams['learning_rate'], sparse_training=hyperparams['sparse_update'], update_percent=hyperparams['update_percent'], random_slope=hyperparams['random_slope'], n_iterations=hyperparams['n_iterations'], n_recombinations=hyperparams['n_recombinations'])
