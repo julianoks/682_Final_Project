@@ -60,9 +60,12 @@ def recombine(model_class, model1, model2):
 	params2 = model2.get_layers()
 	combined_params = {}
 	for k in params1:
-		if np.random.random() < 0.5:
-			combined_params[k] = params1[k]
-		else: combined_params[k] = params2[k]
+		combined_params[k] = params1[k]
+		inds = np.arange(len(params1[k]))
+		inds = np.random.choice(inds, int(len(inds)/2), replace=False)
+		for i in inds:
+			combined_params[k]['b'][:,:,:,i] = params2[k]['b'][:,:,:,i]
+			combined_params[k]['W'][:,:,:,i] = params2[k]['W'][:,:,:,i]
 	combined_model = model_class(random_slope=model1.random_slope, reg_strength=model1.reg_strength)
 	combined_model.ensure_session()
 	combined_model.set_layers(combined_params)
