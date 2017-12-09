@@ -69,7 +69,8 @@ def recombine(model_class, model1, model2):
 	return combined_model
 
 def recomb_accuracy(dataset, model_class, sparse_training=False, update_percent=0.1, n_recombinations=10, n_iterations=1000, random_slope=False, reg_strength=1e-4, learning_rate=0.1, print_every=100):
-	if printing: print("Using random slope?", random_slope)
+	print("Using random slope?", random_slope)
+	print("Sparse training?", sparse_training, update_percent)
 	if sparse_training:
 		model1, model2 = train_pair_on_schedule(dataset, model_class, n_iterations=n_iterations, update_percent=update_percent, random_slope=random_slope, reg_strength=reg_strength, print_every=print_every, learning_rate=learning_rate)
 	else:
