@@ -50,7 +50,7 @@ class Classifier_Model(object):
 		if print_every != False:
 			print('test accuracy %g' % self.sess.run(accuracy, feed_dict= \
 				{X: mnist_dataset.test.images, Y: mnist_dataset.test.labels}))
-			print history
+			print(history)
 		return history
 
 
