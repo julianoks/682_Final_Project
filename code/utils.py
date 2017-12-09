@@ -27,9 +27,9 @@ class conv_layer(object):
 	def forward(self, x):
 		out = tf.nn.conv2d(x, self.W, strides=[1, 1, 1, 1], padding='SAME')
 		out += self.b
-		out *= self.slope
 		if self.dont_relu: return out
 		out = tf.nn.relu(out)
+		out *= self.slope
 		return out
 
 def max_pool_2x2(x):
