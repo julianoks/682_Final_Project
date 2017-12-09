@@ -1,4 +1,7 @@
 import tensorflow as tf
+import json
+
+slope_stddev = json.load(open('hyperparameters.json'))['slope_stddev']
 
 def _weight_var(shape):
 	var = tf.truncated_normal(shape, stddev=0.1, dtype=tf.float32)
@@ -11,7 +14,7 @@ def _bias_var(shape, constant=0):
 def _slope_const(n_filters, random=False):
 	shape = [1,1,1,n_filters]
 	if random:
-		return tf.random_normal(shape, mean=1, stddev=0.1, dtype=tf.float32)
+		return tf.random_normal(shape, mean=1, stddev=slope_stddev, dtype=tf.float32)
 	else:
 		return tf.constant(1., shape=shape, dtype=tf.float32)
 
