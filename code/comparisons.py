@@ -1,7 +1,7 @@
 import tensorflow as tf
 import numpy as np
 
-def train_pair(dataset, model_class, n_iterations=1000, random_slope=False, reg_strength=1e-4, print_every, learning_rate=0.001):
+def train_pair(dataset, model_class, n_iterations=1000, random_slope=False, reg_strength=1e-4, print_every=None, learning_rate=0.001):
 	dummy = model_class(random_slope=random_slope)
 	dummy.ensure_session()
 	init_params = dummy.get_layers()
