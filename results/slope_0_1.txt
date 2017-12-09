@@ -1,0 +1,255 @@
+[01;32mjuao15@tesla[00m:[01;34m~[00m$ cd 682_Final_Project/code/
+[01;32mjuao15@tesla[00m:[01;34m~/682_Final_Project/code[00m$ cat hyperparameters.json ; python comparisons.py ; quit
+{"learning_rate":0.01,
+"n_iterations": 2000,
+"random_slope":true,
+"slope_stddev": 0.1,
+"sparse_update":false,
+"update_percent": 1,
+"channels":[16,16,32,256],
+"n_recombinations": 10,
+"print_every": 25}
+Extracting MNIST_data/train-images-idx3-ubyte.gz
+Extracting MNIST_data/train-labels-idx1-ubyte.gz
+Extracting MNIST_data/t10k-images-idx3-ubyte.gz
+Extracting MNIST_data/t10k-labels-idx1-ubyte.gz
+('Using random slope?', True)
+('Sparse training?', False, 1)
+2017-12-09 08:04:29.328852: W tensorflow/core/platform/cpu_feature_guard.cc:45] The TensorFlow library wasn't compiled to use SSE4.1 instructions, but these are available on your machine and could speed up CPU computations.
+2017-12-09 08:04:29.328892: W tensorflow/core/platform/cpu_feature_guard.cc:45] The TensorFlow library wasn't compiled to use SSE4.2 instructions, but these are available on your machine and could speed up CPU computations.
+2017-12-09 08:04:29.328901: W tensorflow/core/platform/cpu_feature_guard.cc:45] The TensorFlow library wasn't compiled to use AVX instructions, but these are available on your machine and could speed up CPU computations.
+2017-12-09 08:04:29.328908: W tensorflow/core/platform/cpu_feature_guard.cc:45] The TensorFlow library wasn't compiled to use AVX2 instructions, but these are available on your machine and could speed up CPU computations.
+2017-12-09 08:04:29.328916: W tensorflow/core/platform/cpu_feature_guard.cc:45] The TensorFlow library wasn't compiled to use FMA instructions, but these are available on your machine and could speed up CPU computations.
+2017-12-09 08:04:29.562031: I tensorflow/core/common_runtime/gpu/gpu_device.cc:955] Found device 0 with properties: 
+name: Tesla K40m
+major: 3 minor: 5 memoryClockRate (GHz) 0.745
+pciBusID 0000:02:00.0
+Total memory: 11.17GiB
+Free memory: 821.88MiB
+2017-12-09 08:04:29.796200: W tensorflow/stream_executor/cuda/cuda_driver.cc:523] A non-primary context 0x4cbccb0 exists before initializing the StreamExecutor. We haven't verified StreamExecutor works with that.
+2017-12-09 08:04:29.796981: I tensorflow/core/common_runtime/gpu/gpu_device.cc:955] Found device 1 with properties: 
+name: Tesla K40m
+major: 3 minor: 5 memoryClockRate (GHz) 0.745
+pciBusID 0000:81:00.0
+Total memory: 11.17GiB
+Free memory: 823.00MiB
+2017-12-09 08:04:29.797037: I tensorflow/core/common_runtime/gpu/gpu_device.cc:847] Peer access not supported between device ordinals 0 and 1
+2017-12-09 08:04:29.797055: I tensorflow/core/common_runtime/gpu/gpu_device.cc:847] Peer access not supported between device ordinals 1 and 0
+2017-12-09 08:04:29.797080: I tensorflow/core/common_runtime/gpu/gpu_device.cc:976] DMA: 0 1 
+2017-12-09 08:04:29.797090: I tensorflow/core/common_runtime/gpu/gpu_device.cc:986] 0:   Y N 
+2017-12-09 08:04:29.797098: I tensorflow/core/common_runtime/gpu/gpu_device.cc:986] 1:   N Y 
+2017-12-09 08:04:29.797111: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1045] Creating TensorFlow device (/gpu:0) -> (device: 0, name: Tesla K40m, pci bus id: 0000:02:00.0)
+2017-12-09 08:04:29.797121: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1045] Creating TensorFlow device (/gpu:1) -> (device: 1, name: Tesla K40m, pci bus id: 0000:81:00.0)
+Training model 1...
+2017-12-09 08:04:30.754465: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1045] Creating TensorFlow device (/gpu:0) -> (device: 0, name: Tesla K40m, pci bus id: 0000:02:00.0)
+2017-12-09 08:04:30.754510: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1045] Creating TensorFlow device (/gpu:1) -> (device: 1, name: Tesla K40m, pci bus id: 0000:81:00.0)
+step 0, training accuracy 0.140625
+step 25, training accuracy 0.1875
+step 50, training accuracy 0.15625
+step 75, training accuracy 0.234375
+step 100, training accuracy 0.390625
+step 125, training accuracy 0.28125
+step 150, training accuracy 0.25
+step 175, training accuracy 0.453125
+step 200, training accuracy 0.328125
+step 225, training accuracy 0.3125
+step 250, training accuracy 0.421875
+step 275, training accuracy 0.484375
+step 300, training accuracy 0.65625
+step 325, training accuracy 0.71875
+step 350, training accuracy 0.640625
+step 375, training accuracy 0.625
+step 400, training accuracy 0.734375
+step 425, training accuracy 0.703125
+step 450, training accuracy 0.734375
+step 475, training accuracy 0.75
+step 500, training accuracy 0.8125
+step 525, training accuracy 0.828125
+step 550, training accuracy 0.828125
+step 575, training accuracy 0.75
+step 600, training accuracy 0.859375
+step 625, training accuracy 0.703125
+step 650, training accuracy 0.796875
+step 675, training accuracy 0.8125
+step 700, training accuracy 0.828125
+step 725, training accuracy 0.8125
+step 750, training accuracy 0.828125
+step 775, training accuracy 0.84375
+step 800, training accuracy 0.8125
+step 825, training accuracy 0.84375
+step 850, training accuracy 0.90625
+step 875, training accuracy 0.828125
+step 900, training accuracy 0.8125
+step 925, training accuracy 0.765625
+step 950, training accuracy 0.859375
+step 975, training accuracy 0.90625
+step 1000, training accuracy 0.8125
+step 1025, training accuracy 0.9375
+step 1050, training accuracy 0.890625
+step 1075, training accuracy 0.84375
+step 1100, training accuracy 0.875
+step 1125, training accuracy 0.9375
+step 1150, training accuracy 0.921875
+step 1175, training accuracy 0.875
+step 1200, training accuracy 0.921875
+step 1225, training accuracy 0.875
+step 1250, training accuracy 0.921875
+step 1275, training accuracy 0.9375
+step 1300, training accuracy 0.828125
+step 1325, training accuracy 0.84375
+step 1350, training accuracy 0.9375
+step 1375, training accuracy 0.953125
+step 1400, training accuracy 0.9375
+step 1425, training accuracy 0.890625
+step 1450, training accuracy 0.921875
+step 1475, training accuracy 0.890625
+step 1500, training accuracy 0.890625
+step 1525, training accuracy 0.90625
+step 1550, training accuracy 0.921875
+step 1575, training accuracy 0.953125
+step 1600, training accuracy 0.921875
+step 1625, training accuracy 0.9375
+step 1650, training accuracy 0.875
+step 1675, training accuracy 0.890625
+step 1700, training accuracy 1
+step 1725, training accuracy 0.96875
+step 1750, training accuracy 0.875
+step 1775, training accuracy 0.953125
+step 1800, training accuracy 0.84375
+step 1825, training accuracy 0.90625
+step 1850, training accuracy 0.921875
+step 1875, training accuracy 0.90625
+step 1900, training accuracy 0.953125
+step 1925, training accuracy 0.9375
+step 1950, training accuracy 0.9375
+step 1975, training accuracy 0.953125
+test accuracy 0.9253
+[0.140625, 0.1875, 0.15625, 0.234375, 0.390625, 0.28125, 0.25, 0.453125, 0.328125, 0.3125, 0.421875, 0.484375, 0.65625, 0.71875, 0.640625, 0.625, 0.734375, 0.703125, 0.734375, 0.75, 0.8125, 0.828125, 0.828125, 0.75, 0.859375, 0.703125, 0.796875, 0.8125, 0.828125, 0.8125, 0.828125, 0.84375, 0.8125, 0.84375, 0.90625, 0.828125, 0.8125, 0.765625, 0.859375, 0.90625, 0.8125, 0.9375, 0.890625, 0.84375, 0.875, 0.9375, 0.921875, 0.875, 0.921875, 0.875, 0.921875, 0.9375, 0.828125, 0.84375, 0.9375, 0.953125, 0.9375, 0.890625, 0.921875, 0.890625, 0.890625, 0.90625, 0.921875, 0.953125, 0.921875, 0.9375, 0.875, 0.890625, 1.0, 0.96875, 0.875, 0.953125, 0.84375, 0.90625, 0.921875, 0.90625, 0.953125, 0.9375, 0.9375, 0.953125]
+
+
+
+
+
+
+
+
+
+
+Training model 2...
+2017-12-09 08:05:11.244394: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1045] Creating TensorFlow device (/gpu:0) -> (device: 0, name: Tesla K40m, pci bus id: 0000:02:00.0)
+2017-12-09 08:05:11.244459: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1045] Creating TensorFlow device (/gpu:1) -> (device: 1, name: Tesla K40m, pci bus id: 0000:81:00.0)
+step 0, training accuracy 0.078125
+step 25, training accuracy 0.140625
+step 50, training accuracy 0.09375
+step 75, training accuracy 0.15625
+step 100, training accuracy 0.171875
+step 125, training accuracy 0.34375
+step 150, training accuracy 0.46875
+step 175, training accuracy 0.375
+step 200, training accuracy 0.484375
+step 225, training accuracy 0.609375
+step 250, training accuracy 0.453125
+step 275, training accuracy 0.578125
+step 300, training accuracy 0.59375
+step 325, training accuracy 0.6875
+step 350, training accuracy 0.765625
+step 375, training accuracy 0.796875
+step 400, training accuracy 0.71875
+step 425, training accuracy 0.640625
+step 450, training accuracy 0.84375
+step 475, training accuracy 0.8125
+step 500, training accuracy 0.8125
+step 525, training accuracy 0.703125
+step 550, training accuracy 0.796875
+step 575, training accuracy 0.859375
+step 600, training accuracy 0.90625
+step 625, training accuracy 0.8125
+step 650, training accuracy 0.890625
+step 675, training accuracy 0.9375
+step 700, training accuracy 0.78125
+step 725, training accuracy 0.84375
+step 750, training accuracy 0.859375
+step 775, training accuracy 0.90625
+step 800, training accuracy 0.84375
+step 825, training accuracy 0.859375
+step 850, training accuracy 0.921875
+step 875, training accuracy 0.890625
+step 900, training accuracy 0.9375
+step 925, training accuracy 0.859375
+step 950, training accuracy 0.84375
+step 975, training accuracy 0.90625
+step 1000, training accuracy 0.90625
+step 1025, training accuracy 0.90625
+step 1050, training accuracy 0.9375
+step 1075, training accuracy 0.90625
+step 1100, training accuracy 0.84375
+step 1125, training accuracy 0.9375
+step 1150, training accuracy 0.84375
+step 1175, training accuracy 0.875
+step 1200, training accuracy 0.84375
+step 1225, training accuracy 0.921875
+step 1250, training accuracy 0.828125
+step 1275, training accuracy 0.828125
+step 1300, training accuracy 0.9375
+step 1325, training accuracy 0.96875
+step 1350, training accuracy 0.875
+step 1375, training accuracy 0.9375
+step 1400, training accuracy 0.984375
+step 1425, training accuracy 0.9375
+step 1450, training accuracy 0.96875
+step 1475, training accuracy 0.90625
+step 1500, training accuracy 0.9375
+step 1525, training accuracy 0.9375
+step 1550, training accuracy 0.921875
+step 1575, training accuracy 0.875
+step 1600, training accuracy 0.96875
+step 1625, training accuracy 0.875
+step 1650, training accuracy 0.875
+step 1675, training accuracy 0.90625
+step 1700, training accuracy 0.953125
+step 1725, training accuracy 0.921875
+step 1750, training accuracy 0.9375
+step 1775, training accuracy 0.890625
+step 1800, training accuracy 0.890625
+step 1825, training accuracy 0.953125
+step 1850, training accuracy 0.9375
+step 1875, training accuracy 0.921875
+step 1900, training accuracy 0.96875
+step 1925, training accuracy 0.953125
+step 1950, training accuracy 0.8125
+step 1975, training accuracy 0.890625
+test accuracy 0.9466
+[0.078125, 0.140625, 0.09375, 0.15625, 0.171875, 0.34375, 0.46875, 0.375, 0.484375, 0.609375, 0.453125, 0.578125, 0.59375, 0.6875, 0.765625, 0.796875, 0.71875, 0.640625, 0.84375, 0.8125, 0.8125, 0.703125, 0.796875, 0.859375, 0.90625, 0.8125, 0.890625, 0.9375, 0.78125, 0.84375, 0.859375, 0.90625, 0.84375, 0.859375, 0.921875, 0.890625, 0.9375, 0.859375, 0.84375, 0.90625, 0.90625, 0.90625, 0.9375, 0.90625, 0.84375, 0.9375, 0.84375, 0.875, 0.84375, 0.921875, 0.828125, 0.828125, 0.9375, 0.96875, 0.875, 0.9375, 0.984375, 0.9375, 0.96875, 0.90625, 0.9375, 0.9375, 0.921875, 0.875, 0.96875, 0.875, 0.875, 0.90625, 0.953125, 0.921875, 0.9375, 0.890625, 0.890625, 0.953125, 0.9375, 0.921875, 0.96875, 0.953125, 0.8125, 0.890625]
+('distance_between_nets:', 79.324692)
+2017-12-09 08:05:50.578566: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1045] Creating TensorFlow device (/gpu:0) -> (device: 0, name: Tesla K40m, pci bus id: 0000:02:00.0)
+2017-12-09 08:05:50.578615: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1045] Creating TensorFlow device (/gpu:1) -> (device: 1, name: Tesla K40m, pci bus id: 0000:81:00.0)
+2017-12-09 08:05:50.912514: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1045] Creating TensorFlow device (/gpu:0) -> (device: 0, name: Tesla K40m, pci bus id: 0000:02:00.0)
+2017-12-09 08:05:50.912558: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1045] Creating TensorFlow device (/gpu:1) -> (device: 1, name: Tesla K40m, pci bus id: 0000:81:00.0)
+2017-12-09 08:05:58.957494: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1045] Creating TensorFlow device (/gpu:0) -> (device: 0, name: Tesla K40m, pci bus id: 0000:02:00.0)
+2017-12-09 08:05:58.957553: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1045] Creating TensorFlow device (/gpu:1) -> (device: 1, name: Tesla K40m, pci bus id: 0000:81:00.0)
+2017-12-09 08:06:07.086972: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1045] Creating TensorFlow device (/gpu:0) -> (device: 0, name: Tesla K40m, pci bus id: 0000:02:00.0)
+2017-12-09 08:06:07.087024: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1045] Creating TensorFlow device (/gpu:1) -> (device: 1, name: Tesla K40m, pci bus id: 0000:81:00.0)
+2017-12-09 08:06:15.224490: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1045] Creating TensorFlow device (/gpu:0) -> (device: 0, name: Tesla K40m, pci bus id: 0000:02:00.0)
+2017-12-09 08:06:15.224540: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1045] Creating TensorFlow device (/gpu:1) -> (device: 1, name: Tesla K40m, pci bus id: 0000:81:00.0)
+2017-12-09 08:06:23.419954: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1045] Creating TensorFlow device (/gpu:0) -> (device: 0, name: Tesla K40m, pci bus id: 0000:02:00.0)
+2017-12-09 08:06:23.420017: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1045] Creating TensorFlow device (/gpu:1) -> (device: 1, name: Tesla K40m, pci bus id: 0000:81:00.0)
+2017-12-09 08:06:31.691216: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1045] Creating TensorFlow device (/gpu:0) -> (device: 0, name: Tesla K40m, pci bus id: 0000:02:00.0)
+2017-12-09 08:06:31.691275: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1045] Creating TensorFlow device (/gpu:1) -> (device: 1, name: Tesla K40m, pci bus id: 0000:81:00.0)
+2017-12-09 08:06:39.970154: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1045] Creating TensorFlow device (/gpu:0) -> (device: 0, name: Tesla K40m, pci bus id: 0000:02:00.0)
+2017-12-09 08:06:39.970216: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1045] Creating TensorFlow device (/gpu:1) -> (device: 1, name: Tesla K40m, pci bus id: 0000:81:00.0)
+2017-12-09 08:06:48.371264: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1045] Creating TensorFlow device (/gpu:0) -> (device: 0, name: Tesla K40m, pci bus id: 0000:02:00.0)
+2017-12-09 08:06:48.371317: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1045] Creating TensorFlow device (/gpu:1) -> (device: 1, name: Tesla K40m, pci bus id: 0000:81:00.0)
+2017-12-09 08:06:56.863417: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1045] Creating TensorFlow device (/gpu:0) -> (device: 0, name: Tesla K40m, pci bus id: 0000:02:00.0)
+2017-12-09 08:06:56.863466: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1045] Creating TensorFlow device (/gpu:1) -> (device: 1, name: Tesla K40m, pci bus id: 0000:81:00.0)
+2017-12-09 08:07:05.257901: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1045] Creating TensorFlow device (/gpu:0) -> (device: 0, name: Tesla K40m, pci bus id: 0000:02:00.0)
+2017-12-09 08:07:05.257965: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1045] Creating TensorFlow device (/gpu:1) -> (device: 1, name: Tesla K40m, pci bus id: 0000:81:00.0)
+('Recombined Accuracies:', [0.66859996, 0.7924, 0.79759997, 0.71099997, 0.78030002, 0.78830004, 0.62169993, 0.82080007, 0.79560006, 0.66659993], 'Mean:', 0.74428999, '\n\n')
+No command 'quit' found, did you mean:
+ Command 'quilt' from package 'quilt' (universe)
+ Command 'quiz' from package 'bsdgames' (universe)
+ Command 'luit' from package 'x11-utils' (main)
+ Command 'qgit' from package 'qgit' (universe)
+ Command 'quot' from package 'quota' (main)
+quit: command not found
+[01;32mjuao15@tesla[00m:[01;34m~/682_Final_Project/code[00m$ exit
+exit

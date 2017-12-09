@@ -72,11 +72,14 @@ class Classifier_Model(object):
 			layer = self.layers[sorted(self.layers.keys())[int(rand_state.rand() * len(self.layers.keys()))]]
 			inds = np.arange(int(layer.b.shape[-1]))
 			inds = rand_state.choice(inds, int(np.ceil(update_percent*len(inds))), replace=False)
+			mask = np.zeros(layer.b.shape)
+			mask[:,:,:,inds] = 1
+			mask = tf.convert_to_tensor(mask, dtype=layer.b.dtype)
 			grad = tf.gradients(loss, [layer.W, layer.b])
 			wg,bg = self.sess.run(grad, feed_dict={X: batch[0], Y: batch[1]})
 			assns = []
-			assns.append(tf.assign(layer.W, layer.W - (learning_rate * wg)))
-			assns.append(tf.assign(layer.b, layer.b - (learning_rate * bg)))
+			assns.append(tf.assign(layer.W, layer.W - (learning_rate * wg * mask)))
+			assns.append(tf.assign(layer.b, layer.b - (learning_rate * bg * mask)))
 			self.sess.run(assns)
 			if (print_every != False) and (i % print_every == 0):
 				batch_accuracy = self.sess.run(accuracy, feed_dict={X: batch[0], Y: batch[1]})
