@@ -70,7 +70,7 @@ class Classifier_Model(object):
 		for i in range(iterations):
 			batch = mnist_dataset.train.next_batch(batch_size)
 			layer = self.layers[int(rand_state.rand() * len(self.layers.keys()))]
-			inds = np.arange(layer.b.shape[-1])
+			inds = np.arange(int(layer.b.shape[-1]))
 			inds = rand_state.choice(inds, int(np.ceil(update_percent*len(inds))), replace=False)
 			grad = tf.gradients(loss, [layer.W, layer.b])
 			wg,bg = self.sess.run(grad, feed_dict={X: batch[0], Y: batch[1]})
