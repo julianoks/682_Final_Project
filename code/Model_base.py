@@ -74,7 +74,6 @@ class Classifier_Model(object):
 			inds = rand_state.choice(inds, int(np.ceil(update_percent*len(inds))), replace=False)
 			mask = np.zeros(layer.b.shape)
 			mask[:,:,:,inds] = 1
-			mask = tf.convert_to_tensor(mask, dtype=layer.b.dtype)
 			grad = tf.gradients(loss, [layer.W, layer.b])
 			wg,bg = self.sess.run(grad, feed_dict={X: batch[0], Y: batch[1]})
 			assns = []
