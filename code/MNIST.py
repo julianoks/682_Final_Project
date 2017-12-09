@@ -4,7 +4,7 @@ from Model_base import Classifier_Model
 
 class MNIST_model(Classifier_Model):
 	def __init__(self, random_slope=False, reg_strength=1e-4):
-		filter_sizes = [8,16,16,32] #[32, 32, 64, 1024]
+		filter_sizes = [8,8,32,256] #[32, 32, 64, 1024]
 		self.sess = None
 		self.input_shape = [784]
 		self.random_slope = random_slope
