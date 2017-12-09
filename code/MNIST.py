@@ -5,7 +5,7 @@ import json
 
 class MNIST_model(Classifier_Model):
 	def __init__(self, random_slope=False, reg_strength=1e-4):
-		channel_sizes = json.load(open('hyperparameters.py'))['channels'] #[32, 32, 64, 1024]
+		channel_sizes = json.load(open('hyperparameters.json'))['channels'] #[32, 32, 64, 1024]
 		self.sess = None
 		self.input_shape = [784]
 		self.random_slope = random_slope
