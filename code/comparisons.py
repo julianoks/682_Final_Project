@@ -85,6 +85,18 @@ def recomb_accuracy(dataset, model_class, sparse_training=False, update_percent=
 		child = recombine(model_class, model1, model2)
 		return get_accuracy(child, X, Y)
 	accuracies = [recombined_accuracy() for _ in range(n_recombinations)]
+	for name, model in [["model1.png", model1],["model2.png", model2]]:
+		weight = model.get_layers()[1]['W']
+		filters = np.rollaxis(np.squeeze(weight),2,0)
+		min,max = filters.min(axis=(1,2)).reshape((filters.shape[0],1,1)), filters.max(axis=(1,2)).reshape((filters.shape[0],1,1))
+		images = np.array((filters-min)*(255/(max-min)), dtype='uint8')
+		fig, ax = plt.subplots()
+		for i in range(images.shape[0]):
+			_ = fig.add_subplot(1,images.shape[0]+1,i+1)
+			_ = plt.imshow(images[i], cmap='gray')
+		[f.set_axis_off() for f in fig.axes]
+		fig.set_size_inches([images.shape[0],1])
+		plt.savefig(name)
 	model1.close_session()
 	model2.close_session()
 	print("Recombined Accuracies:", accuracies , "Mean:", np.mean(accuracies), "\n\n")
