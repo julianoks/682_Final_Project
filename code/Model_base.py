@@ -21,7 +21,9 @@ class Classifier_Model(object):
 
 	def ensure_session(self):
 		if (self.sess == None) or self.sess._closed:
-			self.sess = tf.Session()
+			config = tf.ConfigProto()
+			config.gpu_options.allow_growth=True
+			self.sess = tf.Session(config=config)
 			self.sess.run(tf.global_variables_initializer())
 
 	def close_session(self):
