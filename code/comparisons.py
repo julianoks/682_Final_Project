@@ -1,6 +1,7 @@
 import tensorflow as tf
 import numpy as np
 import json
+import matplotlib; matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 
 def train_pair(dataset, model_class, n_iterations=1000, random_slope=False, reg_strength=1e-4, print_every=None, learning_rate=0.001):
