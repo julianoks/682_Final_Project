@@ -89,9 +89,9 @@ def recombine(model_class, model1, model2):
 
 def evaluate_pair(dataset, model_class, rand_pen=None, reg_strength=1e-4, sparse_training=False, update_percent=0.1, n_recombinations=10, n_iterations=1000, random_slope=False, learning_rate=0.1, print_every=100):
 	if sparse_training:
-		model1, model2 = train_pair_on_schedule(dataset, model_class, rand_pen=rand_pen, reg_strength=reg_strength, n_iterations=n_iterations, update_percent=update_percent, random_slope=random_slope, reg_strength=reg_strength, print_every=print_every, learning_rate=learning_rate)
+		model1, model2 = train_pair_on_schedule(dataset, model_class, rand_pen=rand_pen, reg_strength=reg_strength, n_iterations=n_iterations, update_percent=update_percent, random_slope=random_slope, print_every=print_every, learning_rate=learning_rate)
 	else:
-		model1, model2 = train_pair(dataset, model_class, rand_pen=rand_pen, reg_strength=reg_strength, n_iterations=n_iterations, random_slope=random_slope, reg_strength=reg_strength, print_every=print_every, learning_rate=learning_rate)
+		model1, model2 = train_pair(dataset, model_class, rand_pen=rand_pen, reg_strength=reg_strength, n_iterations=n_iterations, random_slope=random_slope, print_every=print_every, learning_rate=learning_rate)
 	print("distance_between_nets:", distance_between_nets(model1, model2))
 	child = recombine(model_class, model1, model2)
 	X, Y = dataset.test.images, dataset.test.labels
