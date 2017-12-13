@@ -4,23 +4,34 @@ import json
 import matplotlib; matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 
-def train_pair(dataset, model_class, n_iterations=1000, random_slope=False, reg_strength=1e-4, print_every=None, learning_rate=0.001):
+def inject_reg_penalties(model1, model2, strength, std):
+	model1.reg_penalties, model2.reg_penalties = {}, {}
+	for k in model1.layers:
+		pen = strength + (std * np.random.randn(*model1.layers[k].b.shape))
+		pen_tf = tf.conver_to_tensor(pen, dtype=model1.layers[k].W.dtype)
+		model1.reg_penalties[k], model2.reg_penalties[k] = pen_tf, pen_tf
+
+def train_pair(dataset, model_class, rand_pen=None, n_iterations=1000, random_slope=False, reg_strength=1e-4, print_every=None, learning_rate=0.001):
 	dummy = model_class(random_slope=random_slope)
 	dummy.ensure_session()
 	init_params = dummy.get_layers()
 	dummy.close_session()
 	del dummy
 
-	print("Training model 1...")
 	model1 = model_class(random_slope=random_slope)
+	model2 = model_class(random_slope=random_slope)
+	if rand_pen:
+		strength, std = rand_pen
+		inject_reg_penalties(model1, model2, strength, std)
+	model1.reg_strength, model2.reg_strength = reg_strength, reg_strength
+	print("Training model 1...")
 	model1.train(dataset, iterations=n_iterations, init_params=init_params, print_every=print_every, learning_rate=learning_rate)
 	print("\n\n\n\n\n\n\n\n\n\nTraining model 2...")
-	model2 = model_class(random_slope=random_slope)
 	model2.train(dataset, iterations=n_iterations, init_params=init_params, print_every=print_every, learning_rate=learning_rate)
 	return model1, model2
 
 
-def train_pair_on_schedule(dataset, model_class, n_iterations=1000, random_slope=False, reg_strength=1e-4, print_every=None, update_percent=0.1, learning_rate=5e-3):
+def train_pair_on_schedule(dataset, model_class, rand_pen=None, n_iterations=1000, random_slope=False, reg_strength=1e-4, print_every=None, update_percent=0.1, learning_rate=5e-3):
 	dummy = model_class(random_slope=random_slope)
 	dummy.ensure_session()
 	init_params = dummy.get_layers()
@@ -28,12 +39,15 @@ def train_pair_on_schedule(dataset, model_class, n_iterations=1000, random_slope
 	del dummy
 
 	random_seed = int(1e8*np.random.random())
-
-	print("Training model 1...")
 	model1 = model_class(random_slope=random_slope)
+	model2 = model_class(random_slope=random_slope)
+	if rand_pen:
+		streng, std = rand_pen
+		inject_reg_penalties(model1, model2, strength, std)
+	model1.reg_strength, model2.reg_strength = reg_strength, reg_strength
+	print("Training model 1...")
 	model1.train_sheduled_sparse(dataset, iterations=n_iterations, init_params=init_params, print_every=print_every, random_seed=random_seed, update_percent=update_percent, learning_rate=learning_rate)
 	print("\n\n\n\n\n\n\n\n\n\nTraining model 2...")
-	model2 = model_class(random_slope=random_slope)
 	model2.train_sheduled_sparse(dataset, iterations=n_iterations, init_params=init_params, print_every=print_every, random_seed=random_seed, update_percent=update_percent, learning_rate=learning_rate)
 	return model1, model2
 
@@ -73,13 +87,11 @@ def recombine(model_class, model1, model2):
 	combined_model.set_layers(combined_params)
 	return combined_model
 
-def recomb_accuracy(dataset, model_class, sparse_training=False, update_percent=0.1, n_recombinations=10, n_iterations=1000, random_slope=False, reg_strength=1e-4, learning_rate=0.1, print_every=100):
-	print("Using random slope?", random_slope)
-	print("Sparse training?", sparse_training, update_percent)
+def evaluate_pair(dataset, model_class, rand_pen=None, reg_strength=1e-4, sparse_training=False, update_percent=0.1, n_recombinations=10, n_iterations=1000, random_slope=False, learning_rate=0.1, print_every=100):
 	if sparse_training:
-		model1, model2 = train_pair_on_schedule(dataset, model_class, n_iterations=n_iterations, update_percent=update_percent, random_slope=random_slope, reg_strength=reg_strength, print_every=print_every, learning_rate=learning_rate)
+		model1, model2 = train_pair_on_schedule(dataset, model_class, rand_pen=rand_pen, reg_strength=reg_strength, n_iterations=n_iterations, update_percent=update_percent, random_slope=random_slope, reg_strength=reg_strength, print_every=print_every, learning_rate=learning_rate)
 	else:
-		model1, model2 = train_pair(dataset, model_class, n_iterations=n_iterations, random_slope=random_slope, reg_strength=reg_strength, print_every=print_every, learning_rate=learning_rate)
+		model1, model2 = train_pair(dataset, model_class, rand_pen=rand_pen, reg_strength=reg_strength, n_iterations=n_iterations, random_slope=random_slope, reg_strength=reg_strength, print_every=print_every, learning_rate=learning_rate)
 	print("distance_between_nets:", distance_between_nets(model1, model2))
 	child = recombine(model_class, model1, model2)
 	X, Y = dataset.test.images, dataset.test.labels
@@ -111,4 +123,4 @@ if __name__ == "__main__":
 	from MNIST import MNIST_model
 	mnist = get_mnist_dataset()
 	hyperparams = json.load(open('hyperparameters.json'))
-	recomb_accuracy(mnist, MNIST_model, learning_rate=hyperparams['learning_rate'], sparse_training=hyperparams['sparse_update'], update_percent=hyperparams['update_percent'], random_slope=hyperparams['random_slope'], n_iterations=hyperparams['n_iterations'], n_recombinations=hyperparams['n_recombinations'], print_every=hyperparams['print_every'])
+	evaluate_pair(mnist, MNIST_model, rand_pen=hyperparams['rand_pen'], learning_rate=hyperparams['learning_rate'], sparse_training=hyperparams['sparse_update'], update_percent=hyperparams['update_percent'], random_slope=hyperparams['random_slope'], n_iterations=hyperparams['n_iterations'], n_recombinations=hyperparams['n_recombinations'], print_every=hyperparams['print_every'])

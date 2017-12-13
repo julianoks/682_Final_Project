@@ -8,8 +8,12 @@ class Classifier_Model(object):
 		cross_entropy = tf.reduce_mean( \
 			tf.nn.softmax_cross_entropy_with_logits(labels=Y, logits=scores))
 		reg_loss = 0
-		for k in self.layers:
-			reg_loss += self.reg_strength * tf.reduce_sum(self.layers[k].W ** 2)
+		if hasattr(self, 'reg_penalties'):
+			for k in self.layers:
+				reg_loss += tf.reduce_sum(self.reg_penalties[k] * (self.layers[k].W ** 2))
+		else:
+			for k in self.layers:
+				reg_loss += tf.abs(self.reg_strength * tf.reduce_sum(self.layers[k].W ** 2))
 		loss = cross_entropy + reg_loss
 		return loss
 
