@@ -123,4 +123,4 @@ if __name__ == "__main__":
 	from MNIST import MNIST_model
 	mnist = get_mnist_dataset()
 	hyperparams = json.load(open('hyperparameters.json'))
-	evaluate_pair(mnist, MNIST_model, rand_pen=hyperparams['rand_pen'], learning_rate=hyperparams['learning_rate'], sparse_training=hyperparams['sparse_update'], update_percent=hyperparams['update_percent'], random_slope=hyperparams['random_slope'], n_iterations=hyperparams['n_iterations'], n_recombinations=hyperparams['n_recombinations'], print_every=hyperparams['print_every'])
+	evaluate_pair(mnist, MNIST_model, rand_pen=hyperparams['rand_pen'], hyperparams['reg_strength'], learning_rate=hyperparams['learning_rate'], sparse_training=hyperparams['sparse_update'], update_percent=hyperparams['update_percent'], random_slope=hyperparams['random_slope'], n_iterations=hyperparams['n_iterations'], n_recombinations=hyperparams['n_recombinations'], print_every=hyperparams['print_every'])
