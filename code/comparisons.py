@@ -8,7 +8,7 @@ def inject_reg_penalties(model1, model2, strength, std):
 	model1.reg_penalties, model2.reg_penalties = {}, {}
 	for k in model1.layers:
 		pen = strength + (std * np.random.randn(*model1.layers[k].b.shape))
-		pen_tf = tf.convert_to_tensor(pen, dtype=model1.layers[k].W.dtype)
+		pen_tf = tf.convert_to_tensor(pen, dtype=tf.float32)
 		model1.reg_penalties[k], model2.reg_penalties[k] = pen_tf, pen_tf
 
 def train_pair(dataset, model_class, rand_pen=None, n_iterations=1000, random_slope=False, reg_strength=1e-4, print_every=None, learning_rate=0.001):
