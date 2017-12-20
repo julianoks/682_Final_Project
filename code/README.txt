@@ -1,0 +1,5 @@
+This code repository is part of the final submission for John Fallon and Julian Oks for COMPSCI 682 Neural Networks: A Modern Introduction. This code is an implementation of our ideas and experiments discussed in our paper "Encouraging a Canonical Form of a Neural Network". It was written in Python 3.6 and requires the Tensorflow library. It is also recommended to be running off of an Anaconda Python installation.
+
+The comparisons.py file is the main driver portion of the program, while all other files act as supporting classes and utility functions. The hyperparameters.json is a centralized location for customization options and can be used to easily initiate any of the experiments discussed in the paper. Please contact us if you require any further code explanation (jtfallon@umass.edu, joks@umass.edu).
+
+To run this code you will need to download the data and place it in the correct directory. To minimize size, we have removed the data in our submission. Please download the MNIST data at: http://yann.lecun.com/exdb/mnist/ . Once downloaded, place the data in the MNIST_data folder. After this step, the code should run properly.
